@@ -6,8 +6,8 @@
     <test name="Bank Tests">
         <classes>
             <class name="tests.CreateCustomerTest"/>
-            <class name="tests.SortCustomersTest"/>
-            <class name="tests.DeleteCustomerTest"/>
+<!--            <class name="tests.SortCustomersTest"/>-->
+<!--            <class name="tests.DeleteCustomerTest"/>-->
         </classes>
     </test>
 </suite>

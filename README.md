@@ -1,4 +1,4 @@
-# Тест-кейсы для UIBankingProject
+# Тест-кейсы для UI Banking Project
 
 ## Объект тестирования
 https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager

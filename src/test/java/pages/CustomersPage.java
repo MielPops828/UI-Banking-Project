@@ -1,6 +1,7 @@
 package pages;
 
 import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -36,28 +37,27 @@ public class CustomersPage {
         PageFactory.initElements(driver, this);
     }
 
+    @Step("Открыть страницу XYZ Bank")
     public CustomersPage openPage(){
-        Allure.step("Открыть страницу XYZ Bank", () -> driver.get(ParameterProvider.get("base.url")));
+        driver.get(ParameterProvider.get("base.url"));
         return this;
     }
 
+    @Step("Открыть вкладку Customers")
     public CustomersPage openCustomersTab(){
-        Allure.step("Открыть вкладку Customers", () -> {
-            waiter.waitForElementToBeClickable(customerMenuButton);
-            customerMenuButton.click();
-            waiter.waitForElementVisible(firstNameRow);
-        });
+        waiter.waitForElementToBeClickable(customerMenuButton);
+        customerMenuButton.click();
+        waiter.waitForElementVisible(firstNameRow);
         return this;
     }
 
+    @Step("Сортировать таблицу по First Name")
     public CustomersPage sortByFirstName(){
-        Allure.step("Сортировать таблицу по First Name", () -> {
-            waiter.waitForElementVisible(customerRows.get(0));
-            firstNameRow.click();
-            waiter.waitForElementVisible(customerRows.get(0));
-            firstNameRow.click();
-            waiter.waitForElementVisible(customerRows.get(0));
-        });
+        waiter.waitForElementVisible(customerRows.get(0));
+        firstNameRow.click();
+        waiter.waitForElementVisible(customerRows.get(0));
+        firstNameRow.click();
+        waiter.waitForElementVisible(customerRows.get(0));
         return this;
     }
 
@@ -70,21 +70,18 @@ public class CustomersPage {
         return names;
     }
 
+    @Step("Удалить клиента с именем, длина которого близка к среднему значению суммы длин всех имен")
     public String deleteCustomerWithNameCloseToAverageLength(){
-        Allure.step("Удалить клиента с именем, длина которого близка к среднему значению суммы длин всех имен", () -> {
-            List<String> firstNames = getFirstNames();
-
-            double avgLength = firstNames.stream()
-                    .mapToInt(String::length)
-                    .average()
-                    .orElse(0);
-
-            toDelete = firstNames.stream()
-                    .min((a, b) ->
-                            Double.compare(Math.abs(a.length() - avgLength),
-                                    Math.abs(b.length() - avgLength)))
-                    .orElseThrow(() -> new RuntimeException("Не найден подходящий клиент"));
-        });
+        List<String> firstNames = getFirstNames();
+        double avgLength = firstNames.stream()
+                .mapToInt(String::length)
+                .average()
+                .orElse(0);
+        toDelete = firstNames.stream()
+                .min((a, b) ->
+                        Double.compare(Math.abs(a.length() - avgLength),
+                                Math.abs(b.length() - avgLength)))
+                .orElseThrow(() -> new RuntimeException("Не найден подходящий клиент"));
         WebElement row = customerRows.stream()
                 .filter(r -> r.findElement(By.xpath("td[1]")).getText().equals(toDelete))
                 .findFirst()

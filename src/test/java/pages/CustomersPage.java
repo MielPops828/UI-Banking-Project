@@ -16,6 +16,7 @@ import java.util.Optional;
 public class CustomersPage {
     private final WebDriver driver;
     private final WaitHelper waiter;
+    private String toDelete;
 
     @FindBy(xpath = "//button[contains(text(), 'Customers')]")
     private WebElement customerMenuButton;
@@ -69,30 +70,28 @@ public class CustomersPage {
         return names;
     }
 
-    public CustomersPage deleteCustomerWithNameCloseToAverageLength(){
-        List<String> firstNames = getFirstNames();
+    public String deleteCustomerWithNameCloseToAverageLength(){
+        Allure.step("Удалить клиента с именем, длина которого близка к среднему значению суммы длин всех имен", () -> {
+            List<String> firstNames = getFirstNames();
 
-        double avgLength = firstNames.stream()
-                .mapToInt(String::length)
-                .average()
-                .orElse(0);
+            double avgLength = firstNames.stream()
+                    .mapToInt(String::length)
+                    .average()
+                    .orElse(0);
 
-        Optional<String> toDelete = firstNames.stream()
-                .min((a, b) ->
-                        Double.compare(Math.abs(a.length() - avgLength), Math.abs(b.length() - avgLength))
-                );
-
-        toDelete.ifPresent(name -> {
-            Allure.step("Удалить клиента с именем: " + name, () -> {
-                WebElement row = customerRows.stream()
-                        .filter(r -> r.findElement(By.xpath("td[1]")).getText().equals(name))
-                        .findFirst()
-                        .orElseThrow(() -> new RuntimeException("Клиент не найден"));
-                WebElement deleteBtn = row.findElement(By.xpath(".//button[text()='Delete']"));
-                waiter.waitForElementToBeClickable(deleteBtn);
-                deleteBtn.click();
-            });
+            toDelete = firstNames.stream()
+                    .min((a, b) ->
+                            Double.compare(Math.abs(a.length() - avgLength),
+                                    Math.abs(b.length() - avgLength)))
+                    .orElseThrow(() -> new RuntimeException("Не найден подходящий клиент"));
         });
-        return this;
+        WebElement row = customerRows.stream()
+                .filter(r -> r.findElement(By.xpath("td[1]")).getText().equals(toDelete))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Клиент не найден"));
+        WebElement deleteBtn = row.findElement(By.xpath(".//button[text()='Delete']"));
+        waiter.waitForElementToBeClickable(deleteBtn);
+        deleteBtn.click();
+        return toDelete;
     }
 }

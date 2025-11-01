@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import utilities.ParameterProvider;
 import utilities.ValueGenerator;
 import utilities.WaitHelper;
@@ -17,6 +16,7 @@ public class AddCustomerPage {
     private final WebDriver driver;
     private final WaitHelper waiter;
     private String pc;
+    private String actualText;
 
     @FindBy(xpath = "//button[contains(text(), 'Add Customer')]")
     private WebElement addCustomerMenuButton;
@@ -76,7 +76,7 @@ public class AddCustomerPage {
         return this;
     }
 
-    public AddCustomerPage verifyAlertText(String expectedText) {
+    public String verifyAlertText() {
         Allure.step("Проверить текст алерта", () -> {
             new WebDriverWait(driver, Duration.ofSeconds(3))
                     .until(driver1 -> {
@@ -87,12 +87,11 @@ public class AddCustomerPage {
                             return false;
                         }
                     });
-            String actualText = driver.switchTo().alert().getText();
-            Assert.assertTrue(actualText.contains(expectedText),
-                    "Текст алерта не соответствует ожидаемому. Ожидалось: " + expectedText + ", Получено: " + actualText);
+            actualText = driver.switchTo().alert().getText();
         });
-        return this;
+        return actualText;
     }
+
     public AddCustomerPage acceptAlert(){
         Allure.step("Принять алерт", () -> driver.switchTo().alert().accept());
         return this;

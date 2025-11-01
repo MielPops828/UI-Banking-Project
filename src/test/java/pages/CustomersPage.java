@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
 import utilities.ParameterProvider;
 import utilities.WaitHelper;
 
@@ -93,25 +92,6 @@ public class CustomersPage {
                 waiter.waitForElementToBeClickable(deleteBtn);
                 deleteBtn.click();
             });
-        });
-        return this;
-    }
-
-    public CustomersPage verifySortedAscending() {
-        Allure.step("Проверить выполнение сортировки", () -> {
-            waiter.waitForElementVisible(firstNameCells.get(0));
-
-            List<String> names = new ArrayList<>();
-            for (WebElement cell : firstNameCells){
-                names.add(cell.getText().trim());
-            }
-
-            for (int i = 0; i < names.size() - 1; i++) {
-                String current = names.get(i);
-                String next = names.get(i + 1);
-                Assert.assertTrue(current.compareTo(next) <= 0,
-                        "Список не отсортирован: " + current + " > " + next);
-            }
         });
         return this;
     }

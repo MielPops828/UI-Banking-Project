@@ -3,6 +3,7 @@ package tests;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.AddCustomerPage;
 
@@ -18,8 +19,10 @@ public class CreateCustomerTest extends BaseTest{
                 .setPostCode()
                 .setFirstName()
                 .setLastName("Abcdef")
-                .clickAddCustomer()
-                .verifyAlertText("Customer added successfully with customer id")
-                .acceptAlert();
+                .clickAddCustomer();
+        String actualText = page.verifyAlertText();
+        Assert.assertTrue(actualText.contains("Customer added successfully with customer id"),
+                "Текст алерта не соответствует ожидаемому. Получено: " + actualText);
+        page.acceptAlert();
     }
 }

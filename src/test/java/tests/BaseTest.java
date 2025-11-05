@@ -27,7 +27,7 @@ public class BaseTest {
     @BeforeMethod
     public void setUp() {
         ChromeOptions opt = new ChromeOptions();
-        // opt.addArguments("--headless");
+        opt.addArguments("--headless");
         driver.set(new ChromeDriver(opt));
         driver.get().manage().window().maximize();
 

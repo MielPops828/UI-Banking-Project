@@ -1,6 +1,5 @@
 package pages;
 
-import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +11,6 @@ import utilities.WaitHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class CustomersPage {
     private final WebDriver driver;

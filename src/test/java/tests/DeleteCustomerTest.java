@@ -1,0 +1,24 @@
+package tests;
+
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import pages.CustomersPage;
+
+import java.util.List;
+
+@Epic("Автоматизация страницы XYZ Bank")
+@Feature("Удаление клиент")
+public class DeleteCustomerTest extends BaseTest{
+    @Test
+    @Description("Тест удаления клиента через среднее арифметическое")
+    public void testDeleteCustomer(){
+        CustomersPage page = new CustomersPage(getDriver(), getWaiter());
+        page.openPage().openCustomersTab();
+        String deletedName = page.deleteCustomerWithNameCloseToAverageLength();
+        List<String> namesAfter = page.getFirstNames();
+        Assert.assertFalse(namesAfter.contains(deletedName), "Клиент " + deletedName + " не был удален");
+    }
+}

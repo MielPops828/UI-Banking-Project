@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -11,6 +12,7 @@ import org.testng.annotations.BeforeMethod;
 import utilities.ParameterProvider;
 import utilities.WaitHelper;
 
+import java.net.URL;
 import java.time.Duration;
 
 public class BaseTest {
@@ -21,14 +23,32 @@ public class BaseTest {
 
     @BeforeClass
     public void setupClass() {
-        WebDriverManager.chromedriver().setup();
+        String remoteUrl = System.getProperty("remote.webdriver.url");
+        if (remoteUrl == null || remoteUrl.isEmpty()) {
+            WebDriverManager.chromedriver().setup();
+        }
     }
 
     @BeforeMethod
     public void setUp() {
         ChromeOptions opt = new ChromeOptions();
-        opt.addArguments("--headless");
-        driver.set(new ChromeDriver(opt));
+        String headless = System.getProperty("headless", "true");
+        if (Boolean.parseBoolean(headless)) {
+            opt.addArguments("--headless");
+        }
+        try {
+            String remoteUrl = System.getProperty("remote.webdriver.url");
+            if (remoteUrl != null && !remoteUrl.isEmpty()) {
+                URL url = new URL(remoteUrl);
+                driver.set(new RemoteWebDriver(url, opt));
+                System.out.println("Running on RemoteWebDriver: " + remoteUrl);
+            } else {
+                driver.set(new ChromeDriver(opt));
+                System.out.println("Running locally with ChromeDriver");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize WebDriver", e);
+        }
         driver.get().manage().window().maximize();
 
         webDriverWait.set(new WebDriverWait(driver.get(), Duration.ofSeconds(

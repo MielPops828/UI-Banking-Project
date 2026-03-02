@@ -12,6 +12,10 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <remote.webdriver.url>http://localhost:4444/wd/hub</remote.webdriver.url>
+        <browser>chrome</browser>
+        <allure.results.directory>${project.basedir}/allure-results</allure.results.directory>
     </properties>
 
     <dependencies>
@@ -62,6 +66,11 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <remote.webdriver.url>${remote.webdriver.url}</remote.webdriver.url>
+                        <browser>${browser}</browser>
+                        <allure.results.directory>${allure.results.directory}</allure.results.directory>
+                    </systemPropertyVariables>
                 </configuration>
                 <dependencies>
                     <dependency>

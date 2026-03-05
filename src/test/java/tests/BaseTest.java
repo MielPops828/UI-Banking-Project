@@ -23,11 +23,11 @@ public class BaseTest {
 
     @BeforeClass
     public void setupClass() {
-        String remoteUrl = System.getenv("SELENOID_URL");
+        String remoteUrl = System.getenv("SELENOID_URL");   // webhook test
         if (remoteUrl == null || remoteUrl.isEmpty()) {
             WebDriverManager.chromedriver().setup();
         }
-    }   // webhook test
+    }
 
     @BeforeMethod
     public void setUp() {

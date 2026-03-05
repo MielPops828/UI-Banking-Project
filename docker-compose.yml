@@ -13,15 +13,6 @@ services:
       - "/opt/selenoid/video"
       - "-container-network"
       - "ui-banking-project_default"
-
-#  selenoid-ui:
-#    image: aerokube/selenoid-ui:latest
-#    ports:
-#      - "8084:8080"
-#    command:
-#      - "--selenoid-uri"
-#      - "http://selenoid:4444"
-
   test-runner:
     build: .
     depends_on:

@@ -33,10 +33,10 @@ public class BaseTest {
     public void setUp() {
         ChromeOptions opt = new ChromeOptions();
         opt.setBrowserVersion("128.0");
-//        String headless = System.getProperty("headless", "true");
-//        if (Boolean.parseBoolean(headless)) {
-//            opt.addArguments("--headless=new");
-//        }
+        String headless = System.getProperty("headless", "true");
+        if (Boolean.parseBoolean(headless)) {
+            opt.addArguments("--headless=new");
+        }
         opt.addArguments("--no-sandbox");
         opt.addArguments("--disable-dev-shm-usage");
         try {

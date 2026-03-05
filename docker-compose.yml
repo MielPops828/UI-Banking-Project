@@ -1,42 +1,38 @@
-networks:
-  selenoid-network:
-    driver: bridge
-
 services:
   selenoid:
-    image: aerokube/selenoid:latest-release
-    container_name: banking-selenoid
-    networks:
-      - selenoid-network
-    volumes:
-      - "./browsers.json:/etc/selenoid/browsers.json"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./allure-results:/opt/selenoid/video"
+    image: aerokube/selenoid:1.11.3
     ports:
       - "4444:4444"
-    command: ["-limit", "4", "-conf", "/etc/selenoid/browsers.json"]
-    restart: unless-stopped
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./browsers.json:/etc/selenoid/browsers.json"
+    command:
+      - "-conf"
+      - "/etc/selenoid/browsers.json"
+      - "-video-output-dir"
+      - "/opt/selenoid/video"
+      - "-container-network"
+      - "ui-banking-project_default"
 
-  tests:
+#  selenoid-ui:
+#    image: aerokube/selenoid-ui:latest
+#    ports:
+#      - "8084:8080"
+#    command:
+#      - "--selenoid-uri"
+#      - "http://selenoid:4444"
+
+  test-runner:
     build: .
-    container_name: banking-tests
-    networks:
-      - selenoid-network
     depends_on:
-      - selenoid
+    - selenoid
     environment:
-      - BROWSER=chrome
       - SELENOID_URL=http://selenoid:4444/wd/hub
     volumes:
-      - maven-repo:/root/.m2
+      - .:/app
+      - maven-cache:/root/.m2
       - ./allure-results:/app/allure-results
-      - ./src:/app/src
-    command: >
-      mvn clean test
-      -Dremote.webdriver.url=http://selenoid:4444/wd/hub
-      -Dbrowser=${BROWSER:-chrome}
-      -Dallure.results.directory=/app/allure-results
+    command: mvn clean test
 
 volumes:
-  maven-repo:
-    driver: local
+  maven-cache:

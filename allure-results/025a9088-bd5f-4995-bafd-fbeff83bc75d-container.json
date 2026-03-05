@@ -1,0 +1,1 @@
+{"uuid":"025a9088-bd5f-4995-bafd-fbeff83bc75d","name":"tests.CreateCustomerTest","children":["a01cd8bb-b5ce-4347-88c6-6c69e008b1b1"],"befores":[{"name":"setupClass","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1772624083151,"stop":1772624083174}],"afters":[],"start":1772624082962,"stop":1772624086212}

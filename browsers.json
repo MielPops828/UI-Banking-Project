@@ -1,11 +1,11 @@
 {
   "chrome": {
-    "default": "latest",
+    "default": "128.0",
     "versions": {
-      "latest": {
-        "image": "selenoid/vnc:chrome_latest",
+      "128.0": {
+        "image": "selenoid/chrome:128.0",
         "port": "4444",
-        "path": "/wd/hub"
+        "path": "/"
       }
     }
   }

@@ -27,7 +27,7 @@ public class BaseTest {
         if (remoteUrl == null || remoteUrl.isEmpty()) {
             WebDriverManager.chromedriver().setup();
         }
-    }   // webhook test
+    } 
 
     @BeforeMethod
     public void setUp() {

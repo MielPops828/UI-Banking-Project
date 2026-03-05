@@ -23,7 +23,7 @@ public class BaseTest {
 
     @BeforeClass
     public void setupClass() {
-        String remoteUrl = System.getProperty("remote.webdriver.url");
+        String remoteUrl = System.getenv("SELENOID_URL");
         if (remoteUrl == null || remoteUrl.isEmpty()) {
             WebDriverManager.chromedriver().setup();
         }
@@ -32,12 +32,15 @@ public class BaseTest {
     @BeforeMethod
     public void setUp() {
         ChromeOptions opt = new ChromeOptions();
-        String headless = System.getProperty("headless", "true");
-        if (Boolean.parseBoolean(headless)) {
-            opt.addArguments("--headless");
-        }
+        opt.setBrowserVersion("128.0");
+//        String headless = System.getProperty("headless", "true");
+//        if (Boolean.parseBoolean(headless)) {
+//            opt.addArguments("--headless=new");
+//        }
+        opt.addArguments("--no-sandbox");
+        opt.addArguments("--disable-dev-shm-usage");
         try {
-            String remoteUrl = System.getProperty("remote.webdriver.url");
+            String remoteUrl = System.getenv("SELENOID_URL");
             if (remoteUrl != null && !remoteUrl.isEmpty()) {
                 URL url = new URL(remoteUrl);
                 driver.set(new RemoteWebDriver(url, opt));
